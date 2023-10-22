@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class EmployeeV2ServiceImpl implements EmployeeService{
+
+    List<Employee> employees = new ArrayList<>();
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -32,11 +35,9 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getAllEmployees() {
-        List<EmployeeEntity> employeeEntityList
-                = employeeRepository.findAll();
+        List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
 
-        List<Employee> employees
-                = employeeEntityList
+        List<Employee> employees = employeeEntityList
                 .stream()
                 .map(employeeEntity -> {
                     Employee employee = new Employee();
@@ -44,7 +45,6 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
                     return employee;
                 })
                 .collect(Collectors.toList());
-
         return employees;
     }
 
@@ -52,6 +52,7 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
     public Employee getEmployeeById(String id) {
         EmployeeEntity employeeEntity
                 = employeeRepository.findById(id).get();
+
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeEntity, employee);
 
@@ -60,6 +61,7 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
 
     @Override
     public String deleteEmployeeById(String id) {
-        return null;
+        employeeRepository.deleteById(id);
+        return "Employee deleted with the id " + id;
     }
 }
