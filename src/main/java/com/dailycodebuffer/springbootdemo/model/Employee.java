@@ -1,5 +1,9 @@
 package com.dailycodebuffer.springbootdemo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"department"})
 public class Employee {
     private String employeeId;
     private String firstName;
